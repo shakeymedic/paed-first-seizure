@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>First Seizure Assessment — Children | NICE CG137 / NG217 / RCPCH</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B3A5C;
+    --navy-dark:#132a44;
+    --teal:#01696F;
+    --teal-dark:#014f54;
+  }
+  body{font-family:'Inter',sans-serif;}
+  html{scroll-behavior:smooth;}
+  [id^="sec-"]{scroll-margin-top:150px;}
+  input,textarea,select{border-color:#94a3b8;outline:none;transition:all .15s;}
+  input:focus,textarea:focus,select:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(1,105,111,0.15);}
+  ::-webkit-scrollbar{width:8px;}
+  ::-webkit-scrollbar-track{background:#f1f1f1;}
+  ::-webkit-scrollbar-thumb{background:#64748b;border-radius:4px;}
+
+  .card{background:#fff;border-radius:.75rem;box-shadow:0 1px 2px rgba(0,0,0,.05);border:1px solid #cbd5e1;overflow:hidden;}
+  .card-header{background:var(--navy);color:#fff;padding:.85rem 1.25rem;font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:space-between;letter-spacing:.02em;}
+  .card-body{padding:1.25rem;}
+  .subhead{font-size:.68rem;font-weight:800;text-transform:uppercase;color:#475569;letter-spacing:.04em;margin-bottom:.35rem;display:block;}
+
+  .nav-link{padding:.3rem .65rem;border-radius:.375rem;font-size:.7rem;font-weight:700;text-transform:uppercase;color:#e2e8f0;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);transition:all .15s;white-space:nowrap;}
+  .nav-link:hover{background:var(--teal);color:#fff;border-color:var(--teal);}
+
+  .chip{display:inline-flex;align-items:center;gap:.35rem;padding:.4rem .7rem;border:2px solid #cbd5e1;border-radius:.5rem;font-size:.75rem;font-weight:700;color:#334155;cursor:pointer;background:#f8fafc;transition:all .1s;user-select:none;}
+  .chip:hover{background:#e2e8f0;}
+  .chip input{display:none;}
+  .chip input:checked + span{color:#fff;}
+  .chip:has(input:checked){background:var(--teal);border-color:var(--teal-dark);color:#fff;}
+
+  .chip-red:has(input:checked){background:#dc2626;border-color:#991b1b;}
+  .chip-amber:has(input:checked){background:#d97706;border-color:#92400e;}
+
+  .radio-pill{flex:1;text-align:center;cursor:pointer;}
+  .radio-pill input{display:none;}
+  .radio-pill span{display:block;padding:.55rem .5rem;border-radius:.4rem;font-weight:700;font-size:.8rem;color:#475569;background:#f1f5f9;border:1px solid #cbd5e1;transition:all .12s;}
+  .radio-pill input:checked + span{background:var(--teal);color:#fff;border-color:var(--teal-dark);}
+  .radio-group{display:flex;gap:.4rem;flex-wrap:wrap;}
+
+  .alert-box{border-left:6px solid #dc2626;background:#fef2f2;border-radius:.5rem;padding:.75rem 1rem;font-weight:700;color:#991b1b;font-size:.85rem;}
+  .warn-box{border-left:6px solid #d97706;background:#fffbeb;border-radius:.5rem;padding:.75rem 1rem;font-weight:700;color:#92400e;font-size:.85rem;}
+  .info-box{border-left:6px solid var(--teal);background:#ecfeff;border-radius:.5rem;padding:.75rem 1rem;color:#0f4c4f;font-size:.82rem;}
+
+  .rich-output{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;font-size:.82rem;line-height:1.45;color:#1e293b;background:#f8fafc;border:1px solid #cbd5e1;border-radius:.5rem;padding:1rem;min-height:20rem;max-height:70vh;overflow-y:auto;white-space:pre-wrap;}
+  .rich-output b{font-weight:800;color:#0f172a;}
+
+  .redflag-banner{display:none;}
+  .redflag-banner.show{display:block;}
+
+  @media print{
+    body{background:#fff!important;}
+    header,.no-print,nav{display:none!important;}
+    #formCol{display:none!important;}
+    main{padding:0!important;margin:0!important;display:block!important;}
+    #notePanel{position:static!important;width:100%!important;max-width:100%!important;box-shadow:none!important;border:none!important;}
+    #epr-output{font-size:10.5pt!important;color:#000!important;background:#fff!important;border:none!important;max-height:none!important;overflow:visible!important;}
+  }
+</style>
+</head>
+<body class="bg-slate-100 text-slate-900 antialiased pb-16">
+
+<header class="sticky top-0 z-50 shadow-md no-print" style="background:var(--navy);">
+  <div class="container mx-auto px-4 py-2.5">
+    <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
+      <div>
+        <h1 class="text-lg md:text-xl font-black text-white leading-tight">
+          First Seizure Assessment — Children
+          <span class="text-[10px] font-bold text-slate-200 bg-white/10 px-1.5 py-0.5 rounded border border-white/20 align-middle ml-1">v1.0</span>
+        </h1>
+        <p class="text-[11px] text-teal-200 font-semibold">NICE CG137 / NG217 / RCPCH / APLS</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <p class="text-[10px] text-green-300 font-bold flex items-center gap-1" id="saveStatus">
+          <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span> Auto-save
+        </p>
+        <button id="copy-rich-text-btn" onclick="copyRichText()" class="px-3 py-1.5 text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white rounded shadow-sm transition">Copy Rich Text</button>
+        <button id="btnPrint" class="px-3 py-1.5 text-xs font-bold bg-slate-600 hover:bg-slate-500 text-white rounded shadow-sm transition">Print</button>
+        <button id="btnReset" class="px-3 py-1.5 text-xs font-bold bg-red-700 hover:bg-red-800 text-white rounded shadow-sm transition">Reset</button>
+      </div>
+    </div>
+    <nav class="flex flex-wrap gap-1.5 pb-1 overflow-x-auto">
+      <a href="#sec-1" class="nav-link">1. Patient</a>
+      <a href="#sec-2" class="nav-link">2. Event</a>
+      <a href="#sec-3" class="nav-link">3. Preceding</a>
+      <a href="#sec-4" class="nav-link">4. History</a>
+      <a href="#sec-5" class="nav-link">5. Exam</a>
+      <a href="#sec-6" class="nav-link">6. Investigations</a>
+      <a href="#sec-7" class="nav-link">7. Classification</a>
+      <a href="#sec-8" class="nav-link">8. Red Flags</a>
+      <a href="#sec-9" class="nav-link">9. Management</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container mx-auto px-4 py-6">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <div id="formCol" class="lg:col-span-8 flex flex-col gap-6">
+
+      <!-- RED FLAG BANNER (auto-shows) -->
+      <div id="redFlagBanner" class="redflag-banner card border-2 border-red-600">
+        <div class="card-header" style="background:#b91c1c;">⚠ RED FLAGS PRESENT — Review Section 8</div>
+        <div class="card-body">
+          <ul id="redFlagList" class="list-disc pl-5 text-sm text-red-800 font-bold space-y-1"></ul>
+        </div>
+      </div>
+
+      <!-- SECTION 1 -->
+      <section id="sec-1" class="card">
+        <div class="card-header">1. Patient Details</div>
+        <div class="card-body grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="md:col-span-2"><label class="subhead">Name</label><input type="text" id="p_name" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+          <div><label class="subhead">Date of Birth</label><input type="date" id="p_dob" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+          <div><label class="subhead">Age</label><input type="text" id="p_age" readonly class="w-full px-3 py-2 border rounded-md text-sm bg-slate-100 font-bold"></div>
+          <div><label class="subhead">Weight (kg)</label><input type="number" step="0.1" id="p_weight" class="w-full px-3 py-2 border rounded-md text-sm font-bold"></div>
+          <div>
+            <label class="subhead">Gender</label>
+            <select id="p_gender" class="w-full px-3 py-2 border rounded-md text-sm bg-white">
+              <option value=""></option><option>Male</option><option>Female</option><option>Other/Not specified</option>
+            </select>
+          </div>
+          <div class="md:col-span-2"><label class="subhead">Accompanied by / Witness</label><input type="text" id="p_accompanied" placeholder="Parent / carer / other — who witnessed the event?" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+          <div>
+            <label class="subhead">Referral Source</label>
+            <select id="p_referral" class="w-full px-3 py-2 border rounded-md text-sm bg-white">
+              <option value=""></option><option>Ambulance</option><option>GP</option><option>Walk-in</option><option>Self</option><option>School</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2 -->
+      <section id="sec-2" class="card border-l-[8px]" style="border-left-color:var(--teal);">
+        <div class="card-header">2. Event Description <span class="text-[10px] font-bold bg-amber-400 text-slate-900 px-2 py-0.5 rounded ml-2">CRITICAL</span></div>
+        <div class="card-body flex flex-col gap-5">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div><label class="subhead">Date of Seizure</label><input type="date" id="e_date" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+            <div><label class="subhead">Time of Seizure</label><input type="time" id="e_time" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+            <div>
+              <label class="subhead">Duration (minutes)</label>
+              <input type="number" step="0.5" id="e_duration" class="w-full px-3 py-2 border rounded-md text-sm font-bold">
+              <p id="e_duration_flag" class="text-xs font-bold text-red-600 mt-1 hidden">⚠ PROLONGED SEIZURE (&gt;5 min)</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="subhead">How did it start?</label>
+            <div class="radio-group" data-name="e_onset">
+              <label class="radio-pill"><input type="radio" name="e_onset" value="Focal (one side/area)"><span>Focal</span></label>
+              <label class="radio-pill"><input type="radio" name="e_onset" value="Generalised from onset"><span>Generalised from onset</span></label>
+              <label class="radio-pill"><input type="radio" name="e_onset" value="Unknown onset"><span>Unknown onset</span></label>
+            </div>
+          </div>
+
+          <div>
+            <label class="subhead">Description of movements / behaviour — 2021 ILAE classification (select all that apply)</label>
+            <p class="text-[11px] text-slate-500 mb-2">Generalised: Tonic-clonic/tonic, Clonic, Atonic, Typical/atypical absence, Myoclonic absence, Eyelid myoclonia (±absences), Myoclonic, Myoclonic-atonic, Epileptic spasms. Focal: with preserved or impaired awareness — may include aura, motor manifestations, autonomic features; may evolve to bilateral tonic-clonic.</p>
+            <div class="flex flex-wrap gap-2" id="e_movements_group">
+              <label class="chip"><input type="checkbox" name="e_movements" value="Tonic-clonic/Tonic"><span>Tonic-clonic / Tonic</span></label>
+              <label class="chip"><input type="checkbox" name="e_movements" value="Clonic"><span>Clonic</span></label>
+              <label class="chip"><input type="checkbox" name="e_movements" value="Atonic"><span>Atonic</span></label>
+              <label class="chip"><input type="checkbox" name="e_movements" value="Typical/atypical absence"><span>Typical/atypical absence</span></label>
+              <label class="chip"><input type="checkbox" name="e_movements" value="Myoclonic absence"><span>Myoclonic absence</span></label>
+              <label class="chip"><input type="checkbox" name="e_movements" value="Eyelid myoclonia (with/without absences)"><span>Eyelid myoclonia (±absences)</span></label>
+              <label class="chip"><input type="checkbox" name="e_movements" value="Myoclonic"><span>Myoclonic</span></label>
+              <label class="chip"><input type="checkbox" name="e_movements" value="Myoclonic-atonic"><span>Myoclonic-atonic</span></label>
+              <label class="chip"><input type="checkbox" name="e_movements" value="Epileptic spasms"><span>Epileptic spasms</span></label>
+              <label class="chip"><input type="checkbox" name="e_movements" value="Hypermotor"><span>Hypermotor</span></label>
+              <label class="chip"><input type="checkbox" name="e_movements" value="Focal aware (with aura/motor/autonomic features)"><span>Focal aware</span></label>
+              <label class="chip"><input type="checkbox" name="e_movements" value="Focal impaired awareness"><span>Focal impaired awareness</span></label>
+              <label class="chip"><input type="checkbox" name="e_movements" value="Focal to bilateral tonic-clonic"><span>Focal → bilateral tonic-clonic</span></label>
+            </div>
+          </div>
+
+          <div>
+            <label class="subhead">Witness description — describe exactly what you saw</label>
+            <textarea id="e_witness_desc" rows="3" class="w-full px-3 py-2 border rounded-md text-sm" placeholder="Free text description from witness..."></textarea>
+          </div>
+
+          <div class="info-box">📱 A smartphone video of the suspected epileptic event is crucial for robust diagnosis — ask parent/carer if one was taken and review if available.</div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="subhead">Eyes during seizure</label>
+              <div class="radio-group" data-name="e_eyes">
+                <label class="radio-pill"><input type="radio" name="e_eyes" value="Open"><span>Open</span></label>
+                <label class="radio-pill"><input type="radio" name="e_eyes" value="Closed"><span>Closed</span></label>
+                <label class="radio-pill"><input type="radio" name="e_eyes" value="Deviated"><span>Deviated</span></label>
+              </div>
+            </div>
+            <div id="e_eyedeviation_container" class="hidden">
+              <label class="subhead">Eye deviation direction</label>
+              <div class="radio-group" data-name="e_eyedirection">
+                <label class="radio-pill"><input type="radio" name="e_eyedirection" value="Left"><span>Left</span></label>
+                <label class="radio-pill"><input type="radio" name="e_eyedirection" value="Right"><span>Right</span></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="subhead">Automatisms? (lip smacking, hand movements)</label>
+              <div class="radio-group" data-name="e_automatisms"><label class="radio-pill"><input type="radio" name="e_automatisms" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="e_automatisms" value="No"><span>No</span></label></div>
+            </div>
+            <div>
+              <label class="subhead">Incontinence?</label>
+              <div class="radio-group" data-name="e_incontinence"><label class="radio-pill"><input type="radio" name="e_incontinence" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="e_incontinence" value="No"><span>No</span></label></div>
+            </div>
+            <div>
+              <label class="subhead">Tongue biting?</label>
+              <div class="radio-group" data-name="e_tonguebite"><label class="radio-pill"><input type="radio" name="e_tonguebite" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="e_tonguebite" value="No"><span>No</span></label></div>
+            </div>
+          </div>
+          <div id="e_tonguebite_where_container" class="hidden">
+            <label class="subhead">Tongue biting — location</label>
+            <div class="radio-group" data-name="e_tonguebite_where">
+              <label class="radio-pill"><input type="radio" name="e_tonguebite_where" value="Tip"><span>Tip</span></label>
+              <label class="radio-pill"><input type="radio" name="e_tonguebite_where" value="Lateral"><span>Lateral</span></label>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="subhead">Colour change</label>
+              <div class="radio-group" data-name="e_colour">
+                <label class="radio-pill"><input type="radio" name="e_colour" value="Blue (cyanosis)"><span>Blue</span></label>
+                <label class="radio-pill"><input type="radio" name="e_colour" value="Pale"><span>Pale</span></label>
+                <label class="radio-pill"><input type="radio" name="e_colour" value="Red"><span>Red</span></label>
+                <label class="radio-pill"><input type="radio" name="e_colour" value="None"><span>None</span></label>
+              </div>
+            </div>
+            <div>
+              <label class="subhead">Loss of consciousness</label>
+              <div class="radio-group" data-name="e_loc">
+                <label class="radio-pill"><input type="radio" name="e_loc" value="Complete"><span>Complete</span></label>
+                <label class="radio-pill"><input type="radio" name="e_loc" value="Partial"><span>Partial</span></label>
+                <label class="radio-pill"><input type="radio" name="e_loc" value="No"><span>No</span></label>
+              </div>
+            </div>
+            <div>
+              <label class="subhead">Level of consciousness during</label>
+              <div class="radio-group" data-name="e_lvlconsciousness">
+                <label class="radio-pill"><input type="radio" name="e_lvlconsciousness" value="Alert"><span>Alert</span></label>
+                <label class="radio-pill"><input type="radio" name="e_lvlconsciousness" value="Impaired"><span>Impaired</span></label>
+                <label class="radio-pill"><input type="radio" name="e_lvlconsciousness" value="Unresponsive"><span>Unresponsive</span></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div><label class="subhead">Duration of post-ictal phase (minutes)</label><input type="number" step="1" id="e_postictal_duration" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+            <div>
+              <label class="subhead">Post-ictal features (select all that apply)</label>
+              <div class="flex flex-wrap gap-2">
+                <label class="chip"><input type="checkbox" name="e_postictal" value="Drowsy"><span>Drowsy</span></label>
+                <label class="chip"><input type="checkbox" name="e_postictal" value="Confused"><span>Confused</span></label>
+                <label class="chip"><input type="checkbox" name="e_postictal" value="Headache"><span>Headache</span></label>
+                <label class="chip"><input type="checkbox" name="e_postictal" value="Paralysis (Todd's)"><span>Paralysis (Todd's)</span></label>
+                <label class="chip"><input type="checkbox" name="e_postictal" value="Normal recovery"><span>Normal recovery</span></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="subhead">Any focal features (suggesting focal onset)?</label>
+              <div class="radio-group" data-name="e_focalfeatures"><label class="radio-pill"><input type="radio" name="e_focalfeatures" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="e_focalfeatures" value="No"><span>No</span></label></div>
+            </div>
+            <div id="e_hemiside_container" class="hidden">
+              <label class="subhead">Hemiside</label>
+              <select id="e_hemiside" class="w-full px-3 py-2 border rounded-md text-sm bg-white">
+                <option value=""></option><option>Left</option><option>Right</option><option>Bilateral</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="subhead">Prior aura?</label>
+              <div class="radio-group" data-name="e_aura"><label class="radio-pill"><input type="radio" name="e_aura" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="e_aura" value="No"><span>No</span></label></div>
+            </div>
+            <div id="e_aura_desc_container" class="hidden">
+              <label class="subhead">Aura description</label>
+              <input type="text" id="e_aura_desc" class="w-full px-3 py-2 border rounded-md text-sm">
+            </div>
+          </div>
+
+          <div>
+            <label class="subhead">Witnessed by trained observer? (HCP/paramedic)</label>
+            <div class="radio-group" data-name="e_trainedwitness"><label class="radio-pill"><input type="radio" name="e_trainedwitness" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="e_trainedwitness" value="No"><span>No</span></label></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3 -->
+      <section id="sec-3" class="card">
+        <div class="card-header">3. Preceding Circumstances</div>
+        <div class="card-body flex flex-col gap-5">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+            <div>
+              <label class="subhead">Febrile at time?</label>
+              <div class="radio-group" data-name="c_febrile"><label class="radio-pill"><input type="radio" name="c_febrile" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="c_febrile" value="No"><span>No</span></label></div>
+            </div>
+            <div id="c_temp_container" class="hidden"><label class="subhead">Temperature (°C)</label><input type="number" step="0.1" id="c_temp" class="w-full px-3 py-2 border rounded-md text-sm font-bold"></div>
+            <div id="c_febrile_type_container" class="hidden md:col-span-1">
+              <label class="subhead">Febrile seizure type</label>
+              <div class="radio-group" data-name="c_febrile_type">
+                <label class="radio-pill"><input type="radio" name="c_febrile_type" value="Simple"><span>Simple</span></label>
+                <label class="radio-pill"><input type="radio" name="c_febrile_type" value="Complex"><span>Complex</span></label>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Simple = &lt;15min, generalised, single episode in 24h</p>
+            </div>
+          </div>
+          <div id="febrile_convulsion_note" class="warn-box hidden">CONSIDER FEBRILE CONVULSION — febrile, age 6 months–5 years</div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="subhead">Recent head injury?</label>
+              <div class="radio-group" data-name="c_headinjury"><label class="radio-pill"><input type="radio" name="c_headinjury" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="c_headinjury" value="No"><span>No</span></label></div>
+            </div>
+            <div id="c_headinjury_details_container" class="hidden"><label class="subhead">Details</label><input type="text" id="c_headinjury_details" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="subhead">Recent illness / infection?</label>
+              <div class="radio-group" data-name="c_illness"><label class="radio-pill"><input type="radio" name="c_illness" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="c_illness" value="No"><span>No</span></label></div>
+            </div>
+            <div id="c_illness_details_container" class="hidden"><label class="subhead">Details</label><input type="text" id="c_illness_details" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="subhead">Sleep deprived?</label>
+              <div class="radio-group" data-name="c_sleepdep"><label class="radio-pill"><input type="radio" name="c_sleepdep" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="c_sleepdep" value="No"><span>No</span></label></div>
+            </div>
+            <div>
+              <label class="subhead">Alcohol / drug use (if age-appropriate)?</label>
+              <div class="radio-group" data-name="c_substance"><label class="radio-pill"><input type="radio" name="c_substance" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="c_substance" value="No"><span>No</span></label></div>
+            </div>
+            <div>
+              <label class="subhead">Metabolic disturbance history?</label>
+              <div class="radio-group" data-name="c_metabolic"><label class="radio-pill"><input type="radio" name="c_metabolic" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="c_metabolic" value="No"><span>No</span></label></div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="subhead">Recent medication change or missed dose?</label>
+              <div class="radio-group" data-name="c_medchange"><label class="radio-pill"><input type="radio" name="c_medchange" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="c_medchange" value="No"><span>No</span></label></div>
+            </div>
+            <div>
+              <label class="subhead">Emotional stress?</label>
+              <div class="radio-group" data-name="c_stress"><label class="radio-pill"><input type="radio" name="c_stress" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="c_stress" value="No"><span>No</span></label></div>
+            </div>
+          </div>
+
+          <div>
+            <label class="subhead">Was child awake or asleep when it started?</label>
+            <div class="radio-group" data-name="c_awakestate">
+              <label class="radio-pill"><input type="radio" name="c_awakestate" value="Awake"><span>Awake</span></label>
+              <label class="radio-pill"><input type="radio" name="c_awakestate" value="Asleep"><span>Asleep</span></label>
+              <label class="radio-pill"><input type="radio" name="c_awakestate" value="Waking from sleep"><span>Waking from sleep</span></label>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="subhead">Any provoking factor identified?</label>
+              <div class="radio-group" data-name="c_provoking"><label class="radio-pill"><input type="radio" name="c_provoking" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="c_provoking" value="No"><span>No</span></label></div>
+            </div>
+            <div id="c_provoking_details_container" class="hidden"><label class="subhead">Details</label><input type="text" id="c_provoking_details" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4 -->
+      <section id="sec-4" class="card">
+        <div class="card-header">4. History</div>
+        <div class="card-body flex flex-col gap-5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="subhead">Any previous possible seizure events?</label>
+              <div class="radio-group" data-name="h_priorseizures"><label class="radio-pill"><input type="radio" name="h_priorseizures" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="h_priorseizures" value="No"><span>No</span></label></div>
+            </div>
+            <div id="h_priorseizures_details_container" class="hidden"><label class="subhead">Details</label><input type="text" id="h_priorseizures_details" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="subhead">Family history of epilepsy?</label>
+              <div class="radio-group" data-name="h_famepilepsy"><label class="radio-pill"><input type="radio" name="h_famepilepsy" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="h_famepilepsy" value="No"><span>No</span></label></div>
+            </div>
+            <div id="h_famepilepsy_details_container" class="hidden"><label class="subhead">Details (first-degree relative?)</label><input type="text" id="h_famepilepsy_details" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+          </div>
+
+          <div>
+            <label class="subhead">Family history of febrile convulsions?</label>
+            <div class="radio-group" data-name="h_famfebrile"><label class="radio-pill"><input type="radio" name="h_famfebrile" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="h_famfebrile" value="No"><span>No</span></label></div>
+          </div>
+
+          <div>
+            <label class="subhead">Birth history</label>
+            <div class="flex flex-wrap gap-2">
+              <label class="chip"><input type="checkbox" name="h_birth" value="Normal delivery"><span>Normal delivery</span></label>
+              <label class="chip"><input type="checkbox" name="h_birth" value="Premature"><span>Premature</span></label>
+              <label class="chip"><input type="checkbox" name="h_birth" value="Birth complications"><span>Birth complications</span></label>
+              <label class="chip"><input type="checkbox" name="h_birth" value="Neonatal encephalopathy"><span>Neonatal encephalopathy</span></label>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="subhead">Developmental history</label>
+              <div class="radio-group" data-name="h_devhistory">
+                <label class="radio-pill"><input type="radio" name="h_devhistory" value="Normal"><span>Normal</span></label>
+                <label class="radio-pill"><input type="radio" name="h_devhistory" value="Delay"><span>Delay</span></label>
+                <label class="radio-pill"><input type="radio" name="h_devhistory" value="Regression"><span>Regression</span></label>
+              </div>
+            </div>
+            <div id="h_devhistory_details_container" class="hidden"><label class="subhead">Details</label><input type="text" id="h_devhistory_details" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+          </div>
+
+          <div>
+            <label class="subhead">Developmental milestones</label>
+            <div class="radio-group" data-name="h_milestones"><label class="radio-pill"><input type="radio" name="h_milestones" value="Normal"><span>Normal</span></label><label class="radio-pill"><input type="radio" name="h_milestones" value="Concern"><span>Concern</span></label></div>
+          </div>
+
+          <div>
+            <label class="subhead">Neurodevelopmental diagnosis</label>
+            <div class="flex flex-wrap gap-2">
+              <label class="chip"><input type="checkbox" name="h_neurodev" value="None"><span>None</span></label>
+              <label class="chip"><input type="checkbox" name="h_neurodev" value="Autism"><span>Autism</span></label>
+              <label class="chip"><input type="checkbox" name="h_neurodev" value="ADHD"><span>ADHD</span></label>
+              <label class="chip"><input type="checkbox" name="h_neurodev" value="Learning disability"><span>Learning disability</span></label>
+              <label class="chip"><input type="checkbox" name="h_neurodev" value="Other"><span>Other</span></label>
+            </div>
+          </div>
+
+          <div>
+            <label class="subhead">Past medical history</label>
+            <div class="flex flex-wrap gap-2">
+              <label class="chip"><input type="checkbox" name="h_pmh" value="Head injury"><span>Head injury</span></label>
+              <label class="chip"><input type="checkbox" name="h_pmh" value="Meningitis"><span>Meningitis</span></label>
+              <label class="chip"><input type="checkbox" name="h_pmh" value="Encephalitis"><span>Encephalitis</span></label>
+              <label class="chip"><input type="checkbox" name="h_pmh" value="Cerebral palsy"><span>Cerebral palsy</span></label>
+              <label class="chip"><input type="checkbox" name="h_pmh" value="Brain tumour"><span>Brain tumour</span></label>
+              <label class="chip"><input type="checkbox" name="h_pmh" value="Other neurological"><span>Other neurological</span></label>
+            </div>
+          </div>
+
+          <div><label class="subhead">Current medications</label><textarea id="h_medications" rows="2" class="w-full px-3 py-2 border rounded-md text-sm"></textarea></div>
+
+          <div>
+            <label class="subhead">Immunisations up to date?</label>
+            <div class="radio-group" data-name="h_immunisations">
+              <label class="radio-pill"><input type="radio" name="h_immunisations" value="Yes"><span>Yes</span></label>
+              <label class="radio-pill"><input type="radio" name="h_immunisations" value="No"><span>No</span></label>
+              <label class="radio-pill"><input type="radio" name="h_immunisations" value="Unknown"><span>Unknown</span></label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 5 -->
+      <section id="sec-5" class="card">
+        <div class="card-header">5. Examination</div>
+        <div class="card-body flex flex-col gap-5">
+          <div class="bg-slate-50 border border-slate-300 rounded-lg p-4">
+            <label class="subhead">GCS</label>
+            <div class="grid grid-cols-4 gap-3 items-end">
+              <div><label class="text-[11px] font-bold text-slate-500">Eyes (E)</label><input type="number" min="1" max="4" id="gcs_e" class="w-full px-2 py-2 border rounded text-sm font-bold text-center"></div>
+              <div><label class="text-[11px] font-bold text-slate-500">Verbal (V)</label><input type="number" min="1" max="5" id="gcs_v" class="w-full px-2 py-2 border rounded text-sm font-bold text-center"></div>
+              <div><label class="text-[11px] font-bold text-slate-500">Motor (M)</label><input type="number" min="1" max="6" id="gcs_m" class="w-full px-2 py-2 border rounded text-sm font-bold text-center"></div>
+              <div><label class="text-[11px] font-bold text-slate-500">Total</label><input type="text" id="gcs_total" readonly class="w-full px-2 py-2 border rounded text-sm font-black text-center bg-teal-50 text-teal-800"></div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="subhead">Is child currently post-ictal?</label>
+              <div class="radio-group" data-name="x_postictalnow"><label class="radio-pill"><input type="radio" name="x_postictalnow" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="x_postictalnow" value="No"><span>No</span></label></div>
+            </div>
+            <div>
+              <label class="subhead">Current mental status</label>
+              <div class="radio-group" data-name="x_mentalstatus">
+                <label class="radio-pill"><input type="radio" name="x_mentalstatus" value="Alert"><span>Alert</span></label>
+                <label class="radio-pill"><input type="radio" name="x_mentalstatus" value="Drowsy"><span>Drowsy</span></label>
+                <label class="radio-pill"><input type="radio" name="x_mentalstatus" value="Confused"><span>Confused</span></label>
+                <label class="radio-pill"><input type="radio" name="x_mentalstatus" value="Unresponsive"><span>Unresponsive</span></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-6 gap-3 bg-slate-50 border border-slate-300 rounded-lg p-4">
+            <div><label class="text-[11px] font-bold text-slate-500 uppercase">Temp (°C)</label><input type="number" step="0.1" id="x_temp" class="w-full px-2 py-2 border rounded text-sm font-bold text-center"></div>
+            <div><label class="text-[11px] font-bold text-slate-500 uppercase">HR</label><input type="number" id="x_hr" class="w-full px-2 py-2 border rounded text-sm font-bold text-center"></div>
+            <div><label class="text-[11px] font-bold text-slate-500 uppercase">RR</label><input type="number" id="x_rr" class="w-full px-2 py-2 border rounded text-sm font-bold text-center"></div>
+            <div><label class="text-[11px] font-bold text-slate-500 uppercase">BP</label><input type="text" placeholder="Sys/Dia" id="x_bp" class="w-full px-2 py-2 border rounded text-sm font-bold text-center"></div>
+            <div><label class="text-[11px] font-bold text-slate-500 uppercase">SpO2 %</label><input type="number" id="x_spo2" class="w-full px-2 py-2 border rounded text-sm font-bold text-center"></div>
+            <div>
+              <label class="text-[11px] font-bold text-slate-500 uppercase">Glucose</label>
+              <input type="number" step="0.1" id="x_glucose" class="w-full px-2 py-2 border rounded text-sm font-bold text-center">
+              <p id="x_glucose_flag" class="text-[10px] font-bold text-red-600 mt-1 hidden"></p>
+            </div>
+          </div>
+
+          <div>
+            <label class="subhead">General appearance</label>
+            <div class="radio-group" data-name="x_appearance">
+              <label class="radio-pill"><input type="radio" name="x_appearance" value="Well"><span>Well</span></label>
+              <label class="radio-pill"><input type="radio" name="x_appearance" value="Unwell"><span>Unwell</span></label>
+              <label class="radio-pill"><input type="radio" name="x_appearance" value="Very unwell"><span>Very unwell</span></label>
+              <label class="radio-pill"><input type="radio" name="x_appearance" value="Malnourished"><span>Malnourished</span></label>
+            </div>
+          </div>
+
+          <div>
+            <label class="subhead">Skin (neurocutaneous signs)</label>
+            <div class="flex flex-wrap gap-2">
+              <label class="chip chip-amber"><input type="checkbox" name="x_skin" value="Café-au-lait spots"><span>Café-au-lait spots</span></label>
+              <label class="chip chip-amber"><input type="checkbox" name="x_skin" value="Port wine stain"><span>Port wine stain</span></label>
+              <label class="chip chip-amber"><input type="checkbox" name="x_skin" value="Ash leaf macules"><span>Ash leaf macules</span></label>
+              <label class="chip chip-amber"><input type="checkbox" name="x_skin" value="Shagreen patches"><span>Shagreen patches</span></label>
+              <label class="chip chip-red"><input type="checkbox" name="x_skin" value="Petechiae/purpura"><span>Petechiae/purpura</span></label>
+              <label class="chip"><input type="checkbox" name="x_skin" value="Normal"><span>Normal</span></label>
+            </div>
+          </div>
+
+          <div>
+            <label class="subhead">Dysmorphic features?</label>
+            <div class="radio-group" data-name="x_dysmorphic"><label class="radio-pill"><input type="radio" name="x_dysmorphic" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="x_dysmorphic" value="No"><span>No</span></label></div>
+          </div>
+
+          <div>
+            <label class="subhead">Meningism <span class="text-red-600">(RED FLAG)</span></label>
+            <div class="flex flex-wrap gap-2">
+              <label class="chip chip-red"><input type="checkbox" name="x_meningism" value="Neck stiffness"><span>Neck stiffness</span></label>
+              <label class="chip chip-red"><input type="checkbox" name="x_meningism" value="Kernig's sign"><span>Kernig's</span></label>
+              <label class="chip chip-red"><input type="checkbox" name="x_meningism" value="Photophobia"><span>Photophobia</span></label>
+              <label class="chip chip-red"><input type="checkbox" name="x_meningism" value="Phonophobia"><span>Phonophobia</span></label>
+            </div>
+          </div>
+
+          <div>
+            <label class="subhead">Raised ICP signs <span class="text-red-600">(RED FLAG)</span></label>
+            <div class="flex flex-wrap gap-2">
+              <label class="chip chip-red"><input type="checkbox" name="x_icp" value="Papilloedema"><span>Papilloedema</span></label>
+              <label class="chip chip-red"><input type="checkbox" name="x_icp" value="Bulging fontanelle"><span>Bulging fontanelle</span></label>
+              <label class="chip chip-red"><input type="checkbox" name="x_icp" value="Focal neurology"><span>Focal neurology</span></label>
+              <label class="chip chip-red"><input type="checkbox" name="x_icp" value="Posturing"><span>Posturing</span></label>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="subhead">Focal neurological signs?</label>
+              <div class="radio-group" data-name="x_focalsigns"><label class="radio-pill"><input type="radio" name="x_focalsigns" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="x_focalsigns" value="No"><span>No</span></label></div>
+            </div>
+            <div id="x_focalsigns_details_container" class="hidden"><label class="subhead">Which side / what</label><input type="text" id="x_focalsigns_details" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="subhead">Cranial nerve abnormality?</label>
+              <div class="radio-group" data-name="x_cranialnerve"><label class="radio-pill"><input type="radio" name="x_cranialnerve" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="x_cranialnerve" value="No"><span>No</span></label></div>
+            </div>
+            <div>
+              <label class="subhead">Cerebellar signs?</label>
+              <div class="radio-group" data-name="x_cerebellar"><label class="radio-pill"><input type="radio" name="x_cerebellar" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="x_cerebellar" value="No"><span>No</span></label></div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="subhead">Motor exam</label>
+              <div class="radio-group" data-name="x_motor">
+                <label class="radio-pill"><input type="radio" name="x_motor" value="Normal"><span>Normal</span></label>
+                <label class="radio-pill"><input type="radio" name="x_motor" value="Weakness"><span>Weakness</span></label>
+                <label class="radio-pill"><input type="radio" name="x_motor" value="Asymmetry"><span>Asymmetry</span></label>
+              </div>
+            </div>
+            <div>
+              <label class="subhead">Deep tendon reflexes</label>
+              <div class="radio-group" data-name="x_reflexes">
+                <label class="radio-pill"><input type="radio" name="x_reflexes" value="Normal"><span>Normal</span></label>
+                <label class="radio-pill"><input type="radio" name="x_reflexes" value="Brisk"><span>Brisk</span></label>
+                <label class="radio-pill"><input type="radio" name="x_reflexes" value="Reduced"><span>Reduced</span></label>
+                <label class="radio-pill"><input type="radio" name="x_reflexes" value="Asymmetric"><span>Asymmetric</span></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div><label class="subhead">Head circumference (cm — if infant/toddler)</label><input type="number" step="0.1" id="x_headcirc" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+            <div><label class="subhead">Percentile note</label><input type="text" id="x_headcirc_percentile" placeholder="e.g. 50th centile" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 6 -->
+      <section id="sec-6" class="card">
+        <div class="card-header">6. Investigations</div>
+        <div class="card-body flex flex-col gap-6">
+          <div>
+            <label class="subhead">Bedside</label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div><label class="text-[11px] font-bold text-slate-500 uppercase">BM (mmol/L)</label><input type="number" step="0.1" id="i_bm" class="w-full px-3 py-2 border rounded-md text-sm font-bold"></div>
+              <div>
+                <label class="text-[11px] font-bold text-slate-500 uppercase">Urine dip</label>
+                <div class="radio-group" data-name="i_urinedip">
+                  <label class="radio-pill"><input type="radio" name="i_urinedip" value="Yes"><span>Yes</span></label>
+                  <label class="radio-pill"><input type="radio" name="i_urinedip" value="No"><span>No</span></label>
+                  <label class="radio-pill"><input type="radio" name="i_urinedip" value="Pending"><span>Pending</span></label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="subhead">Bloods ordered (per NICE CG137)</label>
+            <div class="flex flex-wrap gap-2">
+              <label class="chip"><input type="checkbox" name="i_bloods" value="FBC"><span>FBC</span></label>
+              <label class="chip"><input type="checkbox" name="i_bloods" value="U&E"><span>U&E</span></label>
+              <label class="chip"><input type="checkbox" name="i_bloods" value="Calcium"><span>Calcium</span></label>
+              <label class="chip"><input type="checkbox" name="i_bloods" value="Magnesium"><span>Magnesium</span></label>
+              <label class="chip"><input type="checkbox" name="i_bloods" value="Glucose"><span>Glucose</span></label>
+              <label class="chip"><input type="checkbox" name="i_bloods" value="LFT"><span>LFT</span></label>
+              <label class="chip"><input type="checkbox" name="i_bloods" value="Clotting"><span>Clotting</span></label>
+              <label class="chip"><input type="checkbox" name="i_bloods" value="Prolactin (if within 1hr of event)"><span>Prolactin (&lt;1hr)</span></label>
+              <label class="chip"><input type="checkbox" name="i_bloods" value="Blood cultures"><span>Blood cultures</span></label>
+              <label class="chip"><input type="checkbox" name="i_bloods" value="Metabolic screen"><span>Metabolic screen</span></label>
+              <label class="chip"><input type="checkbox" name="i_bloods" value="Toxicology screen"><span>Toxicology screen</span></label>
+              <label class="chip"><input type="checkbox" name="i_bloods" value="Blood gas"><span>Blood gas</span></label>
+              <label class="chip"><input type="checkbox" name="i_bloods" value="Lactate"><span>Lactate</span></label>
+              <label class="chip"><input type="checkbox" name="i_bloods" value="Ammonia"><span>Ammonia</span></label>
+              <label class="chip"><input type="checkbox" name="i_bloods" value="Amino acids"><span>Amino acids</span></label>
+            </div>
+          </div>
+
+          <div>
+            <label class="subhead">Results — critical values</label>
+            <div class="grid grid-cols-2 md:grid-cols-6 gap-3">
+              <div><label class="text-[11px] font-bold text-slate-500">Na</label><input type="number" step="0.1" id="i_na" class="w-full px-2 py-2 border rounded text-sm text-center"></div>
+              <div><label class="text-[11px] font-bold text-slate-500">K</label><input type="number" step="0.1" id="i_k" class="w-full px-2 py-2 border rounded text-sm text-center"></div>
+              <div><label class="text-[11px] font-bold text-slate-500">Ca</label><input type="number" step="0.01" id="i_ca" class="w-full px-2 py-2 border rounded text-sm text-center"></div>
+              <div><label class="text-[11px] font-bold text-slate-500">Mg</label><input type="number" step="0.01" id="i_mg" class="w-full px-2 py-2 border rounded text-sm text-center"></div>
+              <div><label class="text-[11px] font-bold text-slate-500">Glucose</label><input type="number" step="0.1" id="i_glucose_result" class="w-full px-2 py-2 border rounded text-sm text-center"></div>
+              <div><label class="text-[11px] font-bold text-slate-500">Lactate</label><input type="number" step="0.1" id="i_lactate" class="w-full px-2 py-2 border rounded text-sm text-center"></div>
+            </div>
+          </div>
+
+          <div class="border border-slate-300 rounded-lg p-4 bg-slate-50">
+            <label class="subhead">Lumbar Puncture</label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+              <div>
+                <label class="text-[11px] font-bold text-slate-500 uppercase">Indicated?</label>
+                <div class="radio-group" data-name="i_lp_indicated">
+                  <label class="radio-pill"><input type="radio" name="i_lp_indicated" value="Yes"><span>Yes</span></label>
+                  <label class="radio-pill"><input type="radio" name="i_lp_indicated" value="No"><span>No</span></label>
+                  <label class="radio-pill"><input type="radio" name="i_lp_indicated" value="Deferred"><span>Deferred</span></label>
+                </div>
+              </div>
+              <div id="i_lp_reason_container" class="hidden"><label class="text-[11px] font-bold text-slate-500 uppercase">Reason (if No/Deferred)</label><input type="text" id="i_lp_reason" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+            </div>
+            <div class="mb-3">
+              <label class="text-[11px] font-bold text-slate-500 uppercase">Performed?</label>
+              <div class="radio-group" data-name="i_lp_performed"><label class="radio-pill"><input type="radio" name="i_lp_performed" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="i_lp_performed" value="No"><span>No</span></label></div>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+              <div><label class="text-[11px] font-bold text-slate-500">WCC</label><input type="text" id="i_csf_wcc" class="w-full px-2 py-2 border rounded text-sm"></div>
+              <div><label class="text-[11px] font-bold text-slate-500">Protein</label><input type="text" id="i_csf_protein" class="w-full px-2 py-2 border rounded text-sm"></div>
+              <div><label class="text-[11px] font-bold text-slate-500">Glucose</label><input type="text" id="i_csf_glucose" class="w-full px-2 py-2 border rounded text-sm"></div>
+              <div><label class="text-[11px] font-bold text-slate-500">Organisms</label><input type="text" id="i_csf_organisms" class="w-full px-2 py-2 border rounded text-sm"></div>
+              <div><label class="text-[11px] font-bold text-slate-500">Opening pressure</label><input type="text" id="i_csf_pressure" class="w-full px-2 py-2 border rounded text-sm"></div>
+            </div>
+          </div>
+
+          <div class="border border-slate-300 rounded-lg p-4 bg-slate-50">
+            <label class="subhead">Imaging</label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+              <div>
+                <label class="text-[11px] font-bold text-slate-500 uppercase">CT head indicated?</label>
+                <div class="radio-group" data-name="i_ct_indicated"><label class="radio-pill"><input type="radio" name="i_ct_indicated" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="i_ct_indicated" value="No"><span>No</span></label></div>
+              </div>
+              <div><label class="text-[11px] font-bold text-slate-500 uppercase">Rationale</label><input type="text" id="i_ct_rationale" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+            </div>
+            <div class="info-box mb-3">NICE: CT not routinely recommended after first seizure if examination normal. Indications for urgent CT: focal neurology, raised ICP, head injury, immunocompromised, not returned to baseline.</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="text-[11px] font-bold text-slate-500 uppercase">MRI brain requested?</label>
+                <div class="radio-group" data-name="i_mri_requested"><label class="radio-pill"><input type="radio" name="i_mri_requested" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="i_mri_requested" value="No"><span>No</span></label></div>
+              </div>
+              <div id="i_mri_urgency_container" class="hidden">
+                <label class="text-[11px] font-bold text-slate-500 uppercase">Urgency</label>
+                <select id="i_mri_urgency" class="w-full px-3 py-2 border rounded-md text-sm bg-white">
+                  <option value=""></option><option>Routine</option><option>Urgent</option><option>Emergency</option>
+                </select>
+              </div>
+            </div>
+            <div class="info-box mt-3">MRI brain (preferred over CT) should be organised within <strong>6 weeks of diagnosis</strong>, and is indicated in <strong>ALL</strong> children UNLESS: (1) Idiopathic generalised epilepsy, OR (2) SeLECTS with complete seizure control on first-line medication.</div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="subhead">ECG performed?</label>
+              <div class="radio-group" data-name="i_ecg"><label class="radio-pill"><input type="radio" name="i_ecg" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="i_ecg" value="No"><span>No</span></label></div>
+            </div>
+            <div>
+              <label class="subhead">ECG result</label>
+              <select id="i_ecg_result" class="w-full px-3 py-2 border rounded-md text-sm bg-white">
+                <option value=""></option><option>Normal</option><option>Long QT</option><option>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="border border-slate-300 rounded-lg p-4 bg-slate-50">
+            <label class="subhead">EEG</label>
+            <div class="flex items-center gap-3 mb-2">
+              <label class="chip"><input type="checkbox" id="i_eeg_recommended"><span>EEG recommended (routine, outpatient)</span></label>
+            </div>
+
+            <div class="alert-box mb-3" style="font-size:14px; font-weight:800; text-align:center;">⚠️ EEG is NOT routinely indicated for a FIRST generalised tonic-clonic seizure</div>
+
+            <p class="text-[11px] font-bold text-slate-500 uppercase mb-1">EEG indications — Partners in Paediatrics 2025-28 guideline</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2">
+              <div class="rounded-lg border-2 border-green-600 bg-green-50 p-3">
+                <p class="text-xs font-extrabold text-green-800 uppercase mb-1">✅ EEG Indicated</p>
+                <ul class="text-xs text-slate-700 list-disc pl-4 space-y-0.5">
+                  <li>To characterise electroclinical syndrome AFTER clinical diagnosis of epilepsy</li>
+                  <li>After unprovoked status epilepticus</li>
+                  <li>Suspicion of non-convulsive status in a child with known epilepsy</li>
+                  <li>Acquired regression of speech/language</li>
+                </ul>
+              </div>
+              <div class="rounded-lg border-2 border-red-600 bg-red-50 p-3">
+                <p class="text-xs font-extrabold text-red-800 uppercase mb-1">❌ EEG NOT Indicated</p>
+                <ul class="text-xs text-slate-700 list-disc pl-4 space-y-0.5">
+                  <li>Non-epileptic episodes (syncope, reflex anoxic seizures, breath-holding) — ECG more appropriate</li>
+                  <li>Seizures in context of febrile infection</li>
+                  <li><strong>FIRST generalised tonic-clonic seizures</strong></li>
+                  <li>To monitor well-controlled epilepsy</li>
+                  <li>Before stopping treatment</li>
+                </ul>
+              </div>
+            </div>
+            <div class="warn-box">Note to clinician: EEG should NOT be performed routinely in ED as an emergency — arrange outpatient EEG via paediatric neurology only where indicated above.</div>
+          </div>
+
+          <div class="border border-slate-300 rounded-lg p-4 bg-slate-50">
+            <label class="subhead">Genetic testing (Whole Genome Sequencing)</label>
+            <p class="text-[11px] font-bold text-slate-500 uppercase mb-1">Indicated if:</p>
+            <ul class="text-xs text-slate-700 list-disc pl-4 space-y-0.5">
+              <li>Epilepsy onset &lt;2 years with no cause found on imaging</li>
+              <li>Epilepsy in a child with intellectual disability / autism / dysmorphic features / cognitive decline, with no cause found on imaging</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 7 -->
+      <section id="sec-7" class="card">
+        <div class="card-header">7. Classification &amp; Risk Assessment</div>
+        <div class="card-body flex flex-col gap-4">
+          <div>
+            <label class="subhead">Seizure type classification (clinician assessment)</label>
+            <div class="flex flex-col gap-2" id="class_group">
+              <label class="chip w-fit"><input type="radio" name="class_type" value="Provoked seizure (clear cause identified)"><span>Provoked seizure (clear cause identified) — less likely to recur</span></label>
+              <label class="chip w-fit"><input type="radio" name="class_type" value="Unprovoked first seizure"><span>Unprovoked first seizure — risk of recurrence ~40% at 2 years</span></label>
+              <label class="chip w-fit"><input type="radio" name="class_type" value="Febrile convulsion - simple"><span>Febrile convulsion — simple</span></label>
+              <label class="chip w-fit"><input type="radio" name="class_type" value="Febrile convulsion - complex"><span>Febrile convulsion — complex</span></label>
+              <label class="chip w-fit"><input type="radio" name="class_type" value="Suspected epilepsy"><span>Suspected epilepsy (prior events unrecognised)</span></label>
+              <label class="chip w-fit"><input type="radio" name="class_type" value="Status epilepticus"><span>Status epilepticus (&gt;30min or without full recovery)</span></label>
+              <label class="chip w-fit"><input type="radio" name="class_type" value="Syncope / non-epileptic event"><span>Syncope / non-epileptic event (differential)</span></label>
+            </div>
+          </div>
+          <div id="recurrence_risk_box" class="info-box hidden font-semibold"></div>
+
+          <div class="border border-slate-300 rounded-lg p-4 bg-slate-50">
+            <label class="subhead">Key epilepsy syndromes — reference (for recognition, not diagnosis)</label>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs border-collapse">
+                <thead>
+                  <tr class="bg-slate-200 text-slate-700">
+                    <th class="text-left p-2 border border-slate-300">Syndrome</th>
+                    <th class="text-left p-2 border border-slate-300">Typical age</th>
+                    <th class="text-left p-2 border border-slate-300">Key features</th>
+                    <th class="text-left p-2 border border-slate-300">First-line treatment</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td class="p-2 border border-slate-300 font-semibold">CAE (Childhood Absence Epilepsy)</td><td class="p-2 border border-slate-300">4–10yr</td><td class="p-2 border border-slate-300">Brief (~10s) typical absences, multiple/day; normal development</td><td class="p-2 border border-slate-300">Ethosuximide / sodium valproate</td></tr>
+                  <tr><td class="p-2 border border-slate-300 font-semibold">JAE (Juvenile Absence Epilepsy)</td><td class="p-2 border border-slate-300">10–17yr</td><td class="p-2 border border-slate-300">Absences less frequent than CAE, often with GTCS</td><td class="p-2 border border-slate-300">Sodium valproate / lamotrigine</td></tr>
+                  <tr><td class="p-2 border border-slate-300 font-semibold">JME (Juvenile Myoclonic Epilepsy)</td><td class="p-2 border border-slate-300">12–18yr</td><td class="p-2 border border-slate-300">Early-morning myoclonic jerks ± GTCS, sleep deprivation/alcohol triggers</td><td class="p-2 border border-slate-300">Sodium valproate (levetiracetam if avoiding valproate)</td></tr>
+                  <tr><td class="p-2 border border-slate-300 font-semibold">SeLECTS (Self-Limited Epilepsy with Centrotemporal Spikes)</td><td class="p-2 border border-slate-300">3–12yr</td><td class="p-2 border border-slate-300">Nocturnal focal seizures, facial/oropharyngeal, drooling, speech arrest; normal development</td><td class="p-2 border border-slate-300">Often no treatment needed; carbamazepine/levetiracetam if frequent</td></tr>
+                  <tr><td class="p-2 border border-slate-300 font-semibold">SeLEAS (Self-Limited Epilepsy with Autonomic Seizures, Panayiotopoulos)</td><td class="p-2 border border-slate-300">3–6yr</td><td class="p-2 border border-slate-300">Prolonged autonomic seizures (vomiting, pallor), often nocturnal; may progress to status</td><td class="p-2 border border-slate-300">Often no treatment needed; benzodiazepine rescue if prolonged</td></tr>
+                  <tr><td class="p-2 border border-slate-300 font-semibold">IESS / West syndrome (Infantile Epileptic Spasms Syndrome)</td><td class="p-2 border border-slate-300">3–12mo</td><td class="p-2 border border-slate-300">Epileptic spasms in clusters, developmental regression, hypsarrhythmia on EEG</td><td class="p-2 border border-slate-300">Vigabatrin / steroids (urgent specialist referral)</td></tr>
+                  <tr><td class="p-2 border border-slate-300 font-semibold">Dravet syndrome</td><td class="p-2 border border-slate-300">&lt;1yr (febrile status)</td><td class="p-2 border border-slate-300">Prolonged febrile/afebrile hemiclonic or GTC seizures, SCN1A mutation, later developmental regression</td><td class="p-2 border border-slate-300">Sodium valproate / stiripentol — <strong>AVOID sodium channel blockers</strong></td></tr>
+                  <tr><td class="p-2 border border-slate-300 font-semibold">Lennox-Gastaut syndrome (LGS)</td><td class="p-2 border border-slate-300">1–8yr</td><td class="p-2 border border-slate-300">Multiple seizure types (tonic, atonic, atypical absence), intellectual disability, slow spike-wave on EEG</td><td class="p-2 border border-slate-300">Sodium valproate; urgent tertiary referral</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 8 -->
+      <section id="sec-8" class="card border-2 border-red-500">
+        <div class="card-header" style="background:#b91c1c;">8. Red Flags</div>
+        <div class="card-body">
+          <p class="text-sm text-slate-600 mb-3">Auto-highlighted from earlier sections when relevant boxes are ticked.</p>
+          <div id="redflags_display" class="flex flex-col gap-2">
+            <p class="text-sm text-slate-400 italic">No red flags currently identified.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 9 -->
+      <section id="sec-9" class="card">
+        <div class="card-header">9. Management &amp; Disposition</div>
+        <div class="card-body flex flex-col gap-6">
+
+          <div>
+            <label class="subhead">Active seizure management required?</label>
+            <div class="radio-group" data-name="m_activemgmt"><label class="radio-pill"><input type="radio" name="m_activemgmt" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="m_activemgmt" value="No"><span>No</span></label></div>
+          </div>
+
+          <div id="m_activemgmt_container" class="hidden border border-slate-300 rounded-lg p-4 bg-slate-50">
+            <label class="subhead">Medications given (dose auto-calculated from weight)</label>
+            <div class="flex flex-col gap-2">
+              <label class="flex items-center gap-3 bg-white border border-slate-300 rounded-lg p-2.5">
+                <input type="checkbox" id="drug_midazolam" class="w-5 h-5 text-teal-600 rounded"><span class="font-semibold text-sm flex-1">Buccal midazolam <span class="text-slate-400 font-normal">(0.2mg/kg, max 10mg)</span></span>
+                <span id="dose_midazolam" class="font-mono font-bold text-teal-700 text-sm"></span>
+              </label>
+              <label class="flex items-center gap-3 bg-white border border-slate-300 rounded-lg p-2.5">
+                <input type="checkbox" id="drug_diazepam" class="w-5 h-5 text-teal-600 rounded"><span class="font-semibold text-sm flex-1">Rectal diazepam</span>
+              </label>
+              <label class="flex items-center gap-3 bg-white border border-slate-300 rounded-lg p-2.5">
+                <input type="checkbox" id="drug_lorazepam" class="w-5 h-5 text-teal-600 rounded"><span class="font-semibold text-sm flex-1">IV lorazepam <span class="text-slate-400 font-normal">(0.1mg/kg, max 4mg)</span></span>
+                <span id="dose_lorazepam" class="font-mono font-bold text-teal-700 text-sm"></span>
+              </label>
+              <label class="flex items-center gap-3 bg-white border border-slate-300 rounded-lg p-2.5">
+                <input type="checkbox" id="drug_phenytoin" class="w-5 h-5 text-teal-600 rounded"><span class="font-semibold text-sm flex-1">IV phenytoin <span class="text-slate-400 font-normal">(20mg/kg, max 1g)</span></span>
+                <span id="dose_phenytoin" class="font-mono font-bold text-teal-700 text-sm"></span>
+              </label>
+              <div class="alert-box">⚠️ <strong>Phenytoin (and other sodium-channel blockers — lamotrigine, carbamazepine) is CONTRAINDICATED in suspected Dravet syndrome</strong> (e.g. febrile status epilepticus &lt;12 months of age) — use sodium valproate/levetiracetam instead and refer urgently to tertiary neurology.</div>
+              <label class="flex items-center gap-3 bg-white border border-slate-300 rounded-lg p-2.5">
+                <input type="checkbox" id="drug_levetiracetam" class="w-5 h-5 text-teal-600 rounded"><span class="font-semibold text-sm flex-1">IV levetiracetam <span class="text-slate-400 font-normal">(40mg/kg, max 3g over 5 min)</span></span>
+                <span id="dose_levetiracetam" class="font-mono font-bold text-teal-700 text-sm"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="subhead">Blood glucose given?</label>
+              <div class="radio-group" data-name="m_glucosegiven"><label class="radio-pill"><input type="radio" name="m_glucosegiven" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="m_glucosegiven" value="No"><span>No</span></label></div>
+              <p class="text-[11px] text-slate-500 mt-1">Dextrose 10% 2ml/kg if hypoglycaemic <span id="dose_dextrose" class="font-mono font-bold text-teal-700"></span></p>
+            </div>
+            <div>
+              <label class="subhead">Antibiotics given?</label>
+              <div class="radio-group" data-name="m_abxgiven"><label class="radio-pill"><input type="radio" name="m_abxgiven" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="m_abxgiven" value="No"><span>No</span></label></div>
+              <p class="text-[11px] text-slate-500 mt-1">Ceftriaxone 80mg/kg (max 4g) if bacterial meningitis suspected <span id="dose_ceftriaxone" class="font-mono font-bold text-teal-700"></span></p>
+            </div>
+          </div>
+
+          <div class="border border-slate-300 rounded-lg p-4 bg-slate-50">
+            <label class="subhead">Referral</label>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label class="text-[11px] font-bold text-slate-500 uppercase">Paediatric neurology referral?</label>
+                <div class="radio-group" data-name="r_neuroreferral"><label class="radio-pill"><input type="radio" name="r_neuroreferral" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="r_neuroreferral" value="No"><span>No</span></label></div>
+              </div>
+              <div id="r_neuroreferral_urgency_container" class="hidden">
+                <label class="text-[11px] font-bold text-slate-500 uppercase">Urgency</label>
+                <div class="radio-group" data-name="r_neuroreferral_urgency"><label class="radio-pill"><input type="radio" name="r_neuroreferral_urgency" value="Routine"><span>Routine</span></label><label class="radio-pill"><input type="radio" name="r_neuroreferral_urgency" value="Urgent"><span>Urgent</span></label></div>
+              </div>
+              <div>
+                <label class="text-[11px] font-bold text-slate-500 uppercase">PICU involvement?</label>
+                <div class="radio-group" data-name="r_picu"><label class="radio-pill"><input type="radio" name="r_picu" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="r_picu" value="No"><span>No</span></label></div>
+              </div>
+            </div>
+            <div class="mt-3">
+              <label class="text-[11px] font-bold text-slate-500 uppercase">Child protection concern?</label>
+              <div class="radio-group" data-name="r_childprotection"><label class="radio-pill"><input type="radio" name="r_childprotection" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="r_childprotection" value="No"><span>No</span></label></div>
+            </div>
+          </div>
+
+          <div class="border border-slate-300 rounded-lg p-4 bg-slate-50">
+            <label class="subhead">Discharge criteria (per NICE)</label>
+            <div class="flex flex-col gap-2">
+              <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="dc_criteria" value="Returned to neurological baseline" class="w-4 h-4 text-teal-600 rounded"><span>Returned to neurological baseline</span></label>
+              <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="dc_criteria" value="Normal examination" class="w-4 h-4 text-teal-600 rounded"><span>Normal examination</span></label>
+              <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="dc_criteria" value="Simple febrile convulsion in otherwise well child" class="w-4 h-4 text-teal-600 rounded"><span>Simple febrile convulsion in otherwise well child</span></label>
+              <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="dc_criteria" value="No red flags" class="w-4 h-4 text-teal-600 rounded"><span>No red flags</span></label>
+              <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="dc_criteria" value="Adequate parental understanding of safety netting" class="w-4 h-4 text-teal-600 rounded"><span>Adequate parental understanding of safety netting</span></label>
+              <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="dc_criteria" value="EEG arranged (outpatient)" class="w-4 h-4 text-teal-600 rounded"><span>EEG arranged (outpatient)</span></label>
+              <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="dc_criteria" value="Paeds neurology follow-up arranged" class="w-4 h-4 text-teal-600 rounded"><span>Paeds neurology follow-up arranged</span></label>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="subhead">Disposition</label>
+              <select id="m_disposition" class="w-full px-3 py-2 border rounded-md text-sm bg-white">
+                <option value=""></option>
+                <option>Discharge home</option>
+                <option>Observe and discharge</option>
+                <option>Admit general paeds</option>
+                <option>PICU</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div>
+              <label class="subhead">Driving/cycling advice (age &gt;16)?</label>
+              <div class="radio-group" data-name="m_drivingadvice"><label class="radio-pill"><input type="radio" name="m_drivingadvice" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="m_drivingadvice" value="No"><span>No</span></label><label class="radio-pill"><input type="radio" name="m_drivingadvice" value="N/A"><span>N/A</span></label></div>
+            </div>
+          </div>
+
+          <div class="border border-slate-300 rounded-lg p-4 bg-slate-50">
+            <label class="subhead">Safety netting discussed</label>
+            <div class="info-box mb-3">Advise: call 999 if seizure lasts &gt;5 minutes, another seizure occurs, child is not waking up, or new focal features develop.</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="text-[11px] font-bold text-slate-500 uppercase">Written information given?</label>
+                <div class="radio-group" data-name="sn_writteninfo"><label class="radio-pill"><input type="radio" name="sn_writteninfo" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="sn_writteninfo" value="No"><span>No</span></label></div>
+              </div>
+              <div>
+                <label class="text-[11px] font-bold text-slate-500 uppercase">RCPCH/Epilepsy Action leaflet given?</label>
+                <div class="radio-group" data-name="sn_leaflet"><label class="radio-pill"><input type="radio" name="sn_leaflet" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="sn_leaflet" value="No"><span>No</span></label></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="border border-slate-300 rounded-lg p-4 bg-slate-50">
+            <label class="subhead">Follow-up</label>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label class="text-[11px] font-bold text-slate-500 uppercase">GP informed?</label>
+                <div class="radio-group" data-name="f_gpinformed"><label class="radio-pill"><input type="radio" name="f_gpinformed" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="f_gpinformed" value="No"><span>No</span></label></div>
+              </div>
+              <div>
+                <label class="text-[11px] font-bold text-slate-500 uppercase">Paeds neurology appt arranged?</label>
+                <div class="radio-group" data-name="f_neuroappt"><label class="radio-pill"><input type="radio" name="f_neuroappt" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="f_neuroappt" value="No"><span>No</span></label></div>
+              </div>
+              <div id="f_neuroappt_timeframe_container" class="hidden"><label class="text-[11px] font-bold text-slate-500 uppercase">Timeframe</label><input type="text" id="f_neuroappt_timeframe" placeholder="e.g. within 4 weeks" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+              <div>
+                <label class="text-[11px] font-bold text-slate-500 uppercase">School notification?</label>
+                <div class="radio-group" data-name="f_school"><label class="radio-pill"><input type="radio" name="f_school" value="Yes"><span>Yes</span></label><label class="radio-pill"><input type="radio" name="f_school" value="No"><span>No</span></label></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div><label class="subhead">Responsible clinician</label><input type="text" id="m_clinician" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+            <div><label class="subhead">Senior review name</label><input type="text" id="m_seniorreview" class="w-full px-3 py-2 border rounded-md text-sm"></div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="mt-4 py-8 text-center border-t border-slate-300">
+        <p class="text-xs text-slate-500 font-bold">First Seizure Assessment — Children · NICE CG137 / NG217 / RCPCH / APLS · v1.0</p>
+      </footer>
+    </div>
+
+    <div id="notePanel" class="lg:col-span-4 relative">
+      <div class="sticky top-24 space-y-4" style="width:100%;max-width:320px;">
+        <section class="card">
+          <div class="card-header text-sm" style="background:var(--teal);">
+            <span>EPR Note</span>
+          </div>
+          <div class="card-body">
+            <div id="epr-output" contenteditable="true" class="rich-output"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
