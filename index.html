@@ -65,6 +65,50 @@
     #epr-output{font-size:10.5pt!important;color:#000!important;background:#fff!important;border:none!important;max-height:none!important;overflow:visible!important;}
   }
 </style>
+<style>
+/* ── SharePoint-safe two-column layout ───────────────────── */
+.app-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 1.25rem;
+    align-items: start;
+}
+.app-main-col {
+    min-width: 0;
+}
+.app-epr-col {
+    position: sticky;
+    top: 72px;
+    max-height: calc(100vh - 82px);
+    overflow-y: auto;
+}
+@media print {
+    .app-epr-col { display: none !important; }
+    .app-grid { display: block !important; }
+}
+</style>
+<style>
+/* ── SharePoint-safe two-column layout ───────────────────── */
+.app-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 1.25rem;
+    align-items: start;
+}
+.app-main-col {
+    min-width: 0;
+}
+.app-epr-col {
+    position: sticky;
+    top: 72px;
+    max-height: calc(100vh - 82px);
+    overflow-y: auto;
+}
+@media print {
+    .app-epr-col { display: none !important; }
+    .app-grid { display: block !important; }
+}
+</style>
 </head>
 <body class="bg-slate-100 text-slate-900 antialiased pb-16">
 
@@ -102,7 +146,7 @@
 </header>
 
 <main class="container mx-auto px-4 py-6">
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+  <div class="app-grid">
 
     <div id="formCol" class="lg:col-span-8 flex flex-col gap-6">
 
@@ -972,7 +1016,7 @@
       </footer>
     </div>
 
-    <div id="notePanel" class="lg:col-span-4 relative">
+    <div id="epr-output" class="lg:col-span-4 relative">
       <div class="sticky top-24 space-y-4" style="width:100%;max-width:320px;">
         <section class="card">
           <div class="card-header text-sm" style="background:var(--teal);">
