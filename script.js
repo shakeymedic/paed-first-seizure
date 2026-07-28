@@ -365,122 +365,121 @@ document.addEventListener('DOMContentLoaded', () => {
   function radVal(name) { return document.querySelector(`input[name="${name}"]:checked`)?.value || ''; }
   function val(id) { const el = getEl(id); return el ? el.value : ''; }
 
+  function ph(text) {
+    return `<span style="color:#94a3b8">[${text || 'not recorded'}]</span>`;
+  }
+  function fv(v, placeholder) {
+    return (v !== undefined && v !== null && v !== '') ? esc(v) : ph(placeholder);
+  }
+  function heading(text) {
+    return `<b style="font-weight:bold;">${text}</b><br>`;
+  }
+
   function updateNotes() {
     const noteTime = new Date().toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
     updateDoses();
     const flags = updateRedFlags();
     const recurrenceText = updateRecurrenceRisk();
 
-    let h = `<b>PAEDIATRIC FIRST SEIZURE ASSESSMENT</b> <span style="color:#64748b;">[${noteTime}]</span><br><br>`;
+    let h = `<b style="font-weight:bold;">PAEDIATRIC FIRST SEIZURE ASSESSMENT</b> <span style="color:#64748b;">[${noteTime}]</span><br><br>`;
 
     // Patient details
-    h += `<b>Patient Details</b><br>`;
-    h += `Name: ${esc(val('p_name'))} | DOB: ${esc(val('p_dob'))} | Age: ${esc(val('p_age'))} | Weight: ${esc(val('p_weight'))} kg | Gender: ${esc(val('p_gender'))}<br>`;
-    h += `Accompanied by / witness: ${esc(val('p_accompanied'))} | Referral source: ${esc(val('p_referral'))}<br><br>`;
+    h += heading('PATIENT DETAILS');
+    h += `Name: ${fv(val('p_name'))} | DOB: ${fv(val('p_dob'))} | Age: ${fv(val('p_age'))} | Weight: ${val('p_weight') ? esc(val('p_weight')) + ' kg' : ph('not recorded')} | Gender: ${fv(val('p_gender'))}<br>`;
+    h += `Accompanied by: ${fv(val('p_accompanied'))} | Referral source: ${fv(val('p_referral'))}<br><br>`;
 
     // Event description
-    h += `<b>Event Description</b><br>`;
-    h += `Date/Time of seizure: ${esc(val('e_date'))} ${esc(val('e_time'))}<br>`;
+    h += heading('EVENT DESCRIPTION');
+    h += `Date/time of seizure: ${fv(val('e_date'))} ${fv(val('e_time'))} | `;
     const dur = val('e_duration');
-    h += `Duration: ${esc(dur)} min${(!isNaN(parseFloat(dur)) && parseFloat(dur) > 5) ? ' <b style="color:#dc2626;">(PROLONGED &gt;5 min)</b>' : ''}<br>`;
-    h += `Onset type: ${esc(radVal('e_onset'))}<br>`;
+    const prolonged = (!isNaN(parseFloat(dur)) && parseFloat(dur) > 5);
+    h += `Duration: ${dur ? esc(dur) + ' mins' : ph('not recorded')}${prolonged ? ' <span style="color:#dc2626;font-weight:bold">⚠️ PROLONGED</span>' : ''}<br>`;
+    h += `Onset: ${fv(radVal('e_onset'))}<br>`;
     const movements = listVal('e_movements');
-    if (movements.length) h += `Movements/behaviour (2021 ILAE classification): ${esc(movements.join(', '))}<br>`;
-    if (val('e_witness_desc')) h += `Witness description: ${esc(val('e_witness_desc'))}<br>`;
+    h += `Semiology: ${movements.length ? esc(movements.join(', ')) : ph('not documented')}<br>`;
     let eyes = radVal('e_eyes');
     if (eyes === 'Deviated') eyes += ` (${esc(radVal('e_eyedirection'))})`;
-    h += `Eyes: ${esc(eyes)}<br>`;
-    h += `Automatisms: ${esc(radVal('e_automatisms'))} | Incontinence: ${esc(radVal('e_incontinence'))} | Tongue biting: ${esc(radVal('e_tonguebite'))}${radVal('e_tonguebite')==='Yes' ? ' ('+esc(radVal('e_tonguebite_where'))+')' : ''}<br>`;
-    h += `Colour change: ${esc(radVal('e_colour'))} | Loss of consciousness: ${esc(radVal('e_loc'))} | Level of consciousness during: ${esc(radVal('e_lvlconsciousness'))}<br>`;
-    h += `Post-ictal duration: ${esc(val('e_postictal_duration'))} min`;
+    h += `Eyes: ${fv(eyes)} | Incontinence: ${fv(radVal('e_incontinence'))} | Tongue biting: ${fv(radVal('e_tonguebite'))}${radVal('e_tonguebite')==='Yes' ? ' ('+esc(radVal('e_tonguebite_where'))+')' : ''} | Colour change: ${fv(radVal('e_colour'))}<br>`;
+    h += `Consciousness: ${fv(radVal('e_loc'))}${radVal('e_lvlconsciousness') ? ' (' + esc(radVal('e_lvlconsciousness')) + ')' : ''} | Post-ictal duration: ${val('e_postictal_duration') ? esc(val('e_postictal_duration')) + ' mins' : ph('not recorded')}<br>`;
     const postictal = listVal('e_postictal');
-    if (postictal.length) h += ` — Features: ${esc(postictal.join(', '))}`;
-    h += `<br>`;
+    h += `Post-ictal features: ${postictal.length ? esc(postictal.join(', ')) : '<span style="color:#16a34a">Normal rapid recovery</span>'}<br>`;
     let focal = radVal('e_focalfeatures');
     if (focal === 'Yes') focal += ` (${esc(val('e_hemiside'))})`;
-    h += `Focal features suggesting focal onset: ${esc(focal)}<br>`;
-    let aura = radVal('e_aura');
-    if (aura === 'Yes' && val('e_aura_desc')) aura += ` — ${esc(val('e_aura_desc'))}`;
-    h += `Prior aura: ${esc(aura)}<br>`;
-    h += `Witnessed by trained observer: ${esc(radVal('e_trainedwitness'))}<br>`;
-    h += `<i>Smartphone video of suspected epileptic event is crucial for robust diagnosis — reviewed if available.</i><br><br>`;
+    h += `Focal features: ${fv(focal)}<br>`;
+    h += `Witnessed by: ${fv(radVal('e_trainedwitness'))}<br>`;
+    h += `📱 Smartphone video obtained: ${ph('ask parent/carer — review if available')}<br><br>`;
 
     // Preceding circumstances
-    h += `<b>Preceding Circumstances</b><br>`;
-    let febrileLine = `Febrile at time: ${esc(radVal('c_febrile'))}`;
-    if (radVal('c_febrile') === 'Yes') {
-      febrileLine += ` (Temp ${esc(val('c_temp'))}°C)`;
-      if (radVal('c_febrile_type')) febrileLine += ` — ${esc(radVal('c_febrile_type'))} febrile seizure`;
+    h += heading('PRECEDING CIRCUMSTANCES');
+    const febrile = radVal('c_febrile');
+    let febrileLine = `Febrile: ${fv(febrile)}`;
+    if (febrile === 'Yes') {
+      febrileLine += ` (Temp ${fv(val('c_temp'))}°C)`;
       const months = ageInMonths(val('p_dob'));
-      if (months !== null && months >= 6 && months <= 60) febrileLine += ` <b style="color:#b45309;">[CONSIDER FEBRILE CONVULSION]</b>`;
+      if (months !== null && months >= 6 && months <= 60) febrileLine += ` — <span style="color:#d97706;font-weight:bold">⚠️ CONSIDER FEBRILE CONVULSION</span>`;
     }
     h += febrileLine + `<br>`;
-    let hi = radVal('c_headinjury'); if (hi === 'Yes' && val('c_headinjury_details')) hi += ` — ${esc(val('c_headinjury_details'))}`;
-    h += `Recent head injury: ${esc(hi)}<br>`;
-    let ill = radVal('c_illness'); if (ill === 'Yes' && val('c_illness_details')) ill += ` — ${esc(val('c_illness_details'))}`;
-    h += `Recent illness/infection: ${esc(ill)}<br>`;
-    h += `Sleep deprived: ${esc(radVal('c_sleepdep'))} | Alcohol/drug use: ${esc(radVal('c_substance'))} | Metabolic disturbance history: ${esc(radVal('c_metabolic'))}<br>`;
-    h += `Medication change/missed dose: ${esc(radVal('c_medchange'))} | Emotional stress: ${esc(radVal('c_stress'))}<br>`;
-    h += `Awake/asleep at onset: ${esc(radVal('c_awakestate'))}<br>`;
-    let prov = radVal('c_provoking'); if (prov === 'Yes' && val('c_provoking_details')) prov += ` — ${esc(val('c_provoking_details'))}`;
-    h += `Provoking factor identified: ${esc(prov)}<br><br>`;
+    h += `Febrile seizure type: ${febrile === 'Yes' ? fv(radVal('c_febrile_type')) : ph('not applicable')}<br>`;
+    const provokingFactors = [];
+    if (radVal('c_headinjury') === 'Yes') provokingFactors.push('Head injury' + (val('c_headinjury_details') ? ' — ' + val('c_headinjury_details') : ''));
+    if (radVal('c_illness') === 'Yes') provokingFactors.push('Illness/infection' + (val('c_illness_details') ? ' — ' + val('c_illness_details') : ''));
+    if (radVal('c_sleepdep') === 'Yes') provokingFactors.push('Sleep deprivation');
+    if (radVal('c_substance') === 'Yes') provokingFactors.push('Alcohol/drug use');
+    if (radVal('c_metabolic') === 'Yes') provokingFactors.push('Metabolic disturbance');
+    if (radVal('c_medchange') === 'Yes') provokingFactors.push('Medication change/missed dose');
+    if (radVal('c_stress') === 'Yes') provokingFactors.push('Emotional stress');
+    if (radVal('c_provoking') === 'Yes') provokingFactors.push('Other provoking factor' + (val('c_provoking_details') ? ' — ' + val('c_provoking_details') : ''));
+    h += `Provoking factors: ${provokingFactors.length ? esc(provokingFactors.join(', ')) : '<span style="color:#16a34a">None identified</span>'}<br>`;
+    h += `Sleep state at onset: ${fv(radVal('c_awakestate'))}<br><br>`;
 
     // History
-    h += `<b>Relevant History</b><br>`;
+    h += heading('HISTORY');
     let priorSz = radVal('h_priorseizures'); if (priorSz === 'Yes' && val('h_priorseizures_details')) priorSz += ` — ${esc(val('h_priorseizures_details'))}`;
-    h += `Previous possible seizure events: ${esc(priorSz)}<br>`;
+    h += `Previous possible seizures: ${fv(priorSz)} | `;
     let famEp = radVal('h_famepilepsy'); if (famEp === 'Yes' && val('h_famepilepsy_details')) famEp += ` — ${esc(val('h_famepilepsy_details'))}`;
-    h += `Family history epilepsy: ${esc(famEp)} | Family history febrile convulsions: ${esc(radVal('h_famfebrile'))}<br>`;
+    h += `Family history epilepsy: ${fv(famEp)} | Family history FC: ${fv(radVal('h_famfebrile'))}<br>`;
     const birth = listVal('h_birth');
-    if (birth.length) h += `Birth history: ${esc(birth.join(', '))}<br>`;
+    h += `Birth history: ${birth.length ? esc(birth.join(', ')) : ph('not recorded')} | `;
     let dev = radVal('h_devhistory'); if ((dev === 'Delay' || dev === 'Regression') && val('h_devhistory_details')) dev += ` — ${esc(val('h_devhistory_details'))}`;
-    h += `Developmental history: ${esc(dev)} | Milestones: ${esc(radVal('h_milestones'))}<br>`;
+    h += `Development: ${fv(dev)}${radVal('h_milestones') ? ' (Milestones: ' + esc(radVal('h_milestones')) + ')' : ''}<br>`;
     const neurodev = listVal('h_neurodev');
-    if (neurodev.length) h += `Neurodevelopmental diagnosis: ${esc(neurodev.join(', '))}<br>`;
+    h += `Neurodevelopmental diagnoses: ${neurodev.length ? esc(neurodev.join(', ')) : '<span style="color:#16a34a">None</span>'}<br>`;
     const pmh = listVal('h_pmh');
-    if (pmh.length) h += `PMH: ${esc(pmh.join(', '))}<br>`;
-    if (val('h_medications')) h += `Current medications: ${esc(val('h_medications'))}<br>`;
-    h += `Immunisations up to date: ${esc(radVal('h_immunisations'))}<br><br>`;
+    h += `Relevant PMH: ${pmh.length ? esc(pmh.join(', ')) : '<span style="color:#16a34a">None relevant</span>'}<br>`;
+    h += `Current medications: ${fv(val('h_medications'), 'none recorded')} | Immunisations: ${fv(radVal('h_immunisations'))}<br><br>`;
 
     // Examination
-    h += `<b>Examination</b><br>`;
+    h += heading('EXAMINATION');
     const gcsTotal = val('gcs_total');
-    h += `GCS: E${esc(val('gcs_e'))} V${esc(val('gcs_v'))} M${esc(val('gcs_m'))}${gcsTotal ? ` = ${esc(gcsTotal)}` : ''}<br>`;
-    h += `Currently post-ictal: ${esc(radVal('x_postictalnow'))} | Current mental status: ${esc(radVal('x_mentalstatus'))}<br>`;
-    h += `Temp ${esc(val('x_temp'))}°C | HR ${esc(val('x_hr'))} | RR ${esc(val('x_rr'))} | BP ${esc(val('x_bp'))} | SpO2 ${esc(val('x_spo2'))}%`;
+    h += `GCS: E${fv(val('gcs_e'))} V${fv(val('gcs_v'))} M${fv(val('gcs_m'))} = ${gcsTotal ? esc(gcsTotal) + '/15' : ph('not calculated')} | Post-ictal: ${fv(radVal('x_postictalnow'))}<br>`;
+    h += `Conscious level: ${fv(radVal('x_mentalstatus'))} | Temperature: ${fv(val('x_temp'))}°C | HR: ${fv(val('x_hr'))} | RR: ${fv(val('x_rr'))} | SpO2: ${fv(val('x_spo2'))}% | BP: ${fv(val('x_bp'))}<br>`;
     const glu = parseFloat(val('x_glucose'));
-    let gluStr = val('x_glucose');
-    if (!isNaN(glu)) { if (glu < 3.5) gluStr += ' mmol/L <b style="color:#dc2626;">(HYPOGLYCAEMIA)</b>'; else if (glu > 15) gluStr += ' mmol/L <b style="color:#dc2626;">(HYPERGLYCAEMIA)</b>'; else gluStr += ' mmol/L'; }
-    h += ` | Glucose ${gluStr}<br>`;
-    h += `General appearance: ${esc(radVal('x_appearance'))}<br>`;
+    let gluFlag = '';
+    if (!isNaN(glu)) {
+      if (glu < 3.5) gluFlag = ' <span style="color:#dc2626;font-weight:bold">⚠️ HYPOGLYCAEMIA</span>';
+      else if (glu > 15) gluFlag = ' <span style="color:#dc2626;font-weight:bold">⚠️ HYPERGLYCAEMIA</span>';
+    }
+    h += `Glucose: ${val('x_glucose') ? esc(val('x_glucose')) + ' mmol/L' : ph('not recorded')}${gluFlag}<br>`;
+    h += `Appearance: ${fv(radVal('x_appearance'))}<br>`;
     const skin = listVal('x_skin');
-    if (skin.length) h += `Skin: ${esc(skin.join(', '))}<br>`;
-    h += `Dysmorphic features: ${esc(radVal('x_dysmorphic'))}<br>`;
+    h += `Skin: ${skin.length ? esc(skin.join(', ')) : '<span style="color:#16a34a">No neurocutaneous stigmata</span>'}<br>`;
+    h += `Dysmorphic features: ${fv(radVal('x_dysmorphic'))}<br>`;
     const meningism = listVal('x_meningism');
-    if (meningism.length) h += `<b style="color:#dc2626;">Meningism: ${esc(meningism.join(', '))}</b><br>`;
+    h += `Meningism: ${meningism.length ? `<span style="color:#dc2626;font-weight:bold">⚠️ RED FLAG: ${esc(meningism.join(', '))}</span>` : '<span style="color:#16a34a">No meningism</span>'}<br>`;
     const icp = listVal('x_icp');
-    if (icp.length) h += `<b style="color:#dc2626;">Raised ICP signs: ${esc(icp.join(', '))}</b><br>`;
+    h += `Raised ICP signs: ${icp.length ? `<span style="color:#dc2626;font-weight:bold">⚠️ ${esc(icp.join(', '))}</span>` : '<span style="color:#16a34a">No signs of raised ICP</span>'}<br>`;
     let focalSigns = radVal('x_focalsigns'); if (focalSigns === 'Yes' && val('x_focalsigns_details')) focalSigns += ` — ${esc(val('x_focalsigns_details'))}`;
-    h += `Focal neurological signs: ${esc(focalSigns)} | Cranial nerve abnormality: ${esc(radVal('x_cranialnerve'))}<br>`;
-    h += `Motor exam: ${esc(radVal('x_motor'))} | Reflexes: ${esc(radVal('x_reflexes'))} | Cerebellar signs: ${esc(radVal('x_cerebellar'))}<br>`;
-    if (val('x_headcirc')) h += `Head circumference: ${esc(val('x_headcirc'))} cm${val('x_headcirc_percentile') ? ' ('+esc(val('x_headcirc_percentile'))+')' : ''}<br>`;
-    h += `<br>`;
+    h += `Focal neurology: ${fv(focalSigns)}<br>`;
+    h += `Motor exam: ${fv(radVal('x_motor'))} | Reflexes: ${fv(radVal('x_reflexes'))} | Cerebellar: ${fv(radVal('x_cerebellar'))}<br><br>`;
 
     // Investigations
-    h += `<b>Investigations</b><br>`;
-    h += `BM: ${esc(val('i_bm'))} mmol/L | Urine dip: ${esc(radVal('i_urinedip'))}<br>`;
+    h += heading('INVESTIGATIONS');
+    h += `Bedside: BM ${fv(val('i_bm'))} mmol/L | Urine dip ${fv(radVal('i_urinedip'))}<br>`;
     const bloods = listVal('i_bloods');
-    if (bloods.length) h += `Bloods ordered: ${esc(bloods.join(', '))}<br>`;
-    const results = [];
-    if (val('i_na')) results.push(`Na ${esc(val('i_na'))}`);
-    if (val('i_k')) results.push(`K ${esc(val('i_k'))}`);
-    if (val('i_ca')) results.push(`Ca ${esc(val('i_ca'))}`);
-    if (val('i_mg')) results.push(`Mg ${esc(val('i_mg'))}`);
-    if (val('i_glucose_result')) results.push(`Glucose ${esc(val('i_glucose_result'))}`);
-    if (val('i_lactate')) results.push(`Lactate ${esc(val('i_lactate'))}`);
-    if (results.length) h += `Results: ${results.join(', ')}<br>`;
+    h += `Bloods ordered: ${bloods.length ? esc(bloods.join(', ')) : ph('none ordered')}<br>`;
+    h += `Critical results: Na ${fv(val('i_na'))} | K ${fv(val('i_k'))} | Ca ${fv(val('i_ca'))} | Mg ${fv(val('i_mg'))} | Glucose ${fv(val('i_glucose_result'))} | Lactate ${fv(val('i_lactate'))}<br>`;
     let lp = radVal('i_lp_indicated'); if ((lp === 'No' || lp === 'Deferred') && val('i_lp_reason')) lp += ` (${esc(val('i_lp_reason'))})`;
-    h += `LP indicated: ${esc(lp)} | Performed: ${esc(radVal('i_lp_performed'))}`;
+    let lpLine = `LP: ${fv(lp, 'not indicated')}`;
     if (radVal('i_lp_performed') === 'Yes') {
       const csf = [];
       if (val('i_csf_wcc')) csf.push(`WCC ${esc(val('i_csf_wcc'))}`);
@@ -488,53 +487,63 @@ document.addEventListener('DOMContentLoaded', () => {
       if (val('i_csf_glucose')) csf.push(`Glucose ${esc(val('i_csf_glucose'))}`);
       if (val('i_csf_organisms')) csf.push(`Organisms ${esc(val('i_csf_organisms'))}`);
       if (val('i_csf_pressure')) csf.push(`Opening pressure ${esc(val('i_csf_pressure'))}`);
-      if (csf.length) h += ` — CSF: ${csf.join(', ')}`;
+      lpLine += ` — Performed. Findings: ${csf.length ? csf.join(', ') : ph('not recorded')}`;
     }
-    h += `<br>`;
-    let ct = radVal('i_ct_indicated'); if (val('i_ct_rationale')) ct += ` — ${esc(val('i_ct_rationale'))}`;
-    h += `CT head indicated: ${esc(ct)} (NICE: not routine after first seizure if exam normal; urgent CT if focal neurology, raised ICP, head injury, immunocompromised, or not returned to baseline)<br>`;
-    let mri = radVal('i_mri_requested'); if (mri === 'Yes' && val('i_mri_urgency')) mri += ` (${esc(val('i_mri_urgency'))})`;
-    h += `MRI brain requested: ${esc(mri)} (MRI preferred over CT — organise within 6 weeks of diagnosis; indicated in ALL children UNLESS idiopathic generalised epilepsy OR SeLECTS with complete seizure control on first-line medication)<br>`;
-    h += `ECG performed: ${esc(radVal('i_ecg'))}${val('i_ecg_result') ? ' — '+esc(val('i_ecg_result')) : ''}<br>`;
-    h += `EEG: ${getEl('i_eeg_recommended').checked ? 'Recommended (routine, outpatient)' : 'Not indicated at this time'} — <b>EEG NOT routinely indicated for a first generalised tonic-clonic seizure</b>; should NOT be performed as an ED emergency; arrange outpatient EEG via paediatric neurology only if a guideline indication is met<br><br>`;
+    h += lpLine + `<br>`;
+    let ct = radVal('i_ct_indicated');
+    let ctLine = `CT head: ${fv(ct, 'not indicated')}`;
+    if (val('i_ct_rationale')) ctLine += ` — ${esc(val('i_ct_rationale'))}`;
+    h += ctLine + `<br>`;
+    let mri = radVal('i_mri_requested');
+    let mriLine = `MRI brain: ${mri === 'Yes' ? 'requested' : fv(mri, 'not yet requested')}`;
+    mriLine += ` — urgency: ${mri === 'Yes' ? fv(val('i_mri_urgency')) : ph('n/a')}`;
+    h += mriLine + `<br>`;
+    h += `&nbsp;&nbsp;NOTE: MRI indicated within 6 weeks unless idiopathic generalised epilepsy or SeLECTS with complete seizure control<br>`;
+    h += `ECG: ${fv(radVal('i_ecg'))}${val('i_ecg_result') ? ' — ' + esc(val('i_ecg_result')) : ''}<br>`;
+    h += `EEG: <span style="color:#d97706;font-weight:bold">⚠️ EEG NOT routinely indicated for first generalised tonic-clonic seizure</span> — arrange outpatient${getEl('i_eeg_recommended') && getEl('i_eeg_recommended').checked ? ' (recommended)' : ''}<br><br>`;
 
     // Classification
+    h += heading('CLASSIFICATION');
     const classType = radVal('class_type');
-    h += `<b>Classification</b>: ${esc(classType) || 'Not yet classified'}<br>`;
-    if (recurrenceText) h += `<b>Recurrence risk</b>: ${esc(recurrenceText)}<br>`;
+    h += `Seizure type: ${fv(classType, 'not yet classified')}<br>`;
+    h += recurrenceText ? `${esc(recurrenceText)}<br>` : `${ph('recurrence risk not yet available — classify seizure type above')}<br>`;
     h += `<br>`;
 
     // Red flags
-    h += `<b>Red Flags</b>: `;
-    h += flags.length ? `<b style="color:#dc2626;">PRESENT</b> — ${esc(flags.join('; '))}` : 'None identified';
-    h += `<br><br>`;
+    h += heading('RED FLAGS');
+    h += flags.length ? `<span style="color:#dc2626;font-weight:bold">⚠️ ${esc(flags.join('; '))}</span><br><br>` : `<span style="color:#16a34a">No red flags identified</span><br><br>`;
 
     // Management
-    h += `<b>Management</b><br>`;
-    h += `Active seizure management required: ${esc(radVal('m_activemgmt'))}<br>`;
-    if (radVal('m_activemgmt') === 'Yes') {
+    h += heading('MANAGEMENT');
+    const activeMgmt = radVal('m_activemgmt');
+    if (activeMgmt === 'Yes') {
       const drugsGiven = [];
       if (getEl('drug_midazolam').checked) drugsGiven.push(`Buccal midazolam${getEl('dose_midazolam').textContent ? ' '+getEl('dose_midazolam').textContent : ''}`);
       if (getEl('drug_diazepam').checked) drugsGiven.push('Rectal diazepam');
       if (getEl('drug_lorazepam').checked) drugsGiven.push(`IV lorazepam${getEl('dose_lorazepam').textContent ? ' '+getEl('dose_lorazepam').textContent : ''}`);
-      if (getEl('drug_phenytoin').checked) drugsGiven.push(`IV phenytoin${getEl('dose_phenytoin').textContent ? ' '+getEl('dose_phenytoin').textContent : ''} <b style="color:#dc2626;">(CONTRAINDICATED if suspected Dravet syndrome)</b>`);
+      if (getEl('drug_phenytoin').checked) drugsGiven.push(`IV phenytoin${getEl('dose_phenytoin').textContent ? ' '+getEl('dose_phenytoin').textContent : ''} <span style="color:#dc2626;font-weight:bold">(CONTRAINDICATED if suspected Dravet syndrome)</span>`);
       if (getEl('drug_levetiracetam').checked) drugsGiven.push(`IV levetiracetam${getEl('dose_levetiracetam').textContent ? ' '+getEl('dose_levetiracetam').textContent : ''}`);
-      if (drugsGiven.length) h += `Medications given: ${drugsGiven.join(', ')}<br>`;
+      h += `Active seizure treatment: ${drugsGiven.length ? drugsGiven.join(', ') : ph('not recorded')}<br>`;
+    } else {
+      h += `Active seizure treatment: ${activeMgmt === 'No' ? '<span style="color:#16a34a">No active seizure treatment required</span>' : ph('not recorded')}<br>`;
     }
-    h += `Blood glucose given: ${esc(radVal('m_glucosegiven'))}${radVal('m_glucosegiven') === 'Yes' && getEl('dose_dextrose').textContent ? ' — Dextrose 10% '+getEl('dose_dextrose').textContent : ''}<br>`;
-    h += `Antibiotics given: ${esc(radVal('m_abxgiven'))}${radVal('m_abxgiven') === 'Yes' && getEl('dose_ceftriaxone').textContent ? ' — Ceftriaxone '+getEl('dose_ceftriaxone').textContent : ''}<br>`;
+    const glucGiven = radVal('m_glucosegiven');
+    h += `Glucose: ${glucGiven === 'Yes' ? 'given' + (getEl('dose_dextrose').textContent ? ' — Dextrose 10% ' + getEl('dose_dextrose').textContent : '') : fv(glucGiven, 'not required')}<br>`;
+    const abxGiven = radVal('m_abxgiven');
+    h += `Antibiotics: ${abxGiven === 'Yes' ? 'given' + (getEl('dose_ceftriaxone').textContent ? ' — Ceftriaxone ' + getEl('dose_ceftriaxone').textContent : '') : fv(abxGiven, 'not required')}<br>`;
     let neuroRef = radVal('r_neuroreferral'); if (neuroRef === 'Yes' && radVal('r_neuroreferral_urgency')) neuroRef += ` (${esc(radVal('r_neuroreferral_urgency'))})`;
-    h += `Paediatric neurology referral: ${esc(neuroRef)} | PICU involvement: ${esc(radVal('r_picu'))} | Child protection concern: ${esc(radVal('r_childprotection'))}<br><br>`;
+    h += `Referral: Paediatric neurology ${fv(neuroRef)} | PICU: ${fv(radVal('r_picu'))}<br>`;
+    h += `Child protection concern: ${fv(radVal('r_childprotection'))}<br><br>`;
 
     // Disposition
+    h += heading('DISPOSITION');
     const dcCriteria = listVal('dc_criteria');
-    h += `<b>Disposition</b>: ${esc(val('m_disposition')) || 'Not yet determined'}<br>`;
-    if (dcCriteria.length) h += `Discharge criteria met: ${esc(dcCriteria.join(', '))}<br>`;
-    h += `Driving/cycling advice given (if age &gt;16): ${esc(radVal('m_drivingadvice'))}<br>`;
-    h += `Safety netting: call 999 if seizure &gt;5min, another seizure, not waking up, or focal features. Written information given: ${esc(radVal('sn_writteninfo'))}. RCPCH/Epilepsy Action leaflet given: ${esc(radVal('sn_leaflet'))}<br>`;
+    h += `Discharge criteria: ${dcCriteria.length ? esc(dcCriteria.join(', ')) : ph('not yet assessed')}<br>`;
+    h += `Disposition: ${fv(val('m_disposition'), 'not yet determined')}<br>`;
+    h += `Safety netting provided: ${fv(radVal('sn_writteninfo'))} | Written information: ${fv(radVal('sn_leaflet'))}<br>`;
     let neuroAppt = radVal('f_neuroappt'); if (neuroAppt === 'Yes' && val('f_neuroappt_timeframe')) neuroAppt += ` (${esc(val('f_neuroappt_timeframe'))})`;
-    h += `Follow-up: GP informed: ${esc(radVal('f_gpinformed'))} | Paeds neurology appt arranged: ${esc(neuroAppt)} | School notification: ${esc(radVal('f_school'))}<br>`;
-    h += `Responsible clinician: ${esc(val('m_clinician'))} | Senior review: ${esc(val('m_seniorreview'))}<br>`;
+    h += `Follow-up: GP informed ${fv(radVal('f_gpinformed'))} | Neurology appt ${fv(neuroAppt)} | School notification ${fv(radVal('f_school'))}<br>`;
+    h += `Responsible clinician: ${fv(val('m_clinician'))} | Senior review: ${fv(val('m_seniorreview'))}<br>`;
 
     getEl('epr-output').innerHTML = h;
     saveState();
