@@ -109,6 +109,14 @@
     .app-grid { display: block !important; }
 }
 </style>
+<style>
+/* Mobile: stack the form and EPR note in one column */
+.app-grid > * { min-width: 0; }
+@media (max-width: 1023px) {
+    .app-grid { grid-template-columns: minmax(0, 1fr); }
+    .app-epr-col { position: static; max-height: none; }
+}
+</style>
 </head>
 <body class="bg-slate-100 text-slate-900 antialiased pb-16">
 
